@@ -1,16 +1,14 @@
 using System.IO;
-using Networking;
 using Networking.Packets;
-using Networking.PacketSender;
 
-namespace Server
+namespace Networking.PacketSender
 {
-    public class NetworkPacket : INetworkPacket
+    public class MemoryNetworkPacket : INetworkPacket
     {
         private readonly IPacketHeader _packetHeader;
         private readonly MemoryStream _stream;
 
-        public NetworkPacket(IPacketHeader packetHeader)
+        public MemoryNetworkPacket(IPacketHeader packetHeader)
         {
             _packetHeader = packetHeader;
             _stream = new MemoryStream();

@@ -1,6 +1,6 @@
 namespace Networking
 {
-    public partial interface IDeserialization<T>
+    public interface IDeserialization<out T>
     {
         public T Deserialize(IInputStream inputStream);
     }

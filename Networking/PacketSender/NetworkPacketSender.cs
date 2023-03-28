@@ -1,4 +1,6 @@
-﻿namespace Networking.PacketSender
+﻿using System;
+
+namespace Networking.PacketSender
 {
     public class NetworkPacketSender : INetworkPacketSender
     {
@@ -11,7 +13,9 @@
         
         public void SendPacket(INetworkPacket networkPacket)
         {
+            Console.Write(" Time: " + DateTime.Now.TimeOfDay);
             _networkOutputStream.Write(networkPacket.Data);
+            Console.Write(" Time: " + DateTime.Now.TimeOfDay);
         }
     }
 }

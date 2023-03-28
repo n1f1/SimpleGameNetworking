@@ -1,20 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Networking;
 
 namespace DemoGame.ClassID
 {
-    public class ClassIdConfiguration : IClassIDConfiguration
+    public class TypeIdConversion : ITypeIdConversion
     {
-        private Dictionary<Type,int> _classToIdHash;
+        private readonly Dictionary<Type, int> _typeToIdHash;
+        private readonly Dictionary<int, Type> _idToTypeHash;
 
-        public void Initialize()
+        public TypeIdConversion(Dictionary<Type, int> typeToIdHash)
         {
-            _classToIdHash = new Dictionary<Type, int>();
-            _classToIdHash.Add(typeof(Player), BitConverter.ToInt32(Encoding.UTF8.GetBytes("PLYR")));
-            _classToIdHash.Add(typeof(MoveCommand), BitConverter.ToInt32(Encoding.UTF8.GetBytes("CMVE")));
+            _typeToIdHash = typeToIdHash ?? throw new ArgumentNullException(nameof(typeToIdHash));
+
+            _idToTypeHash = new Dictionary<int, Type>();
+
+            foreach (KeyValuePair<Type, int> pair in _typeToIdHash)
+                _idToTypeHash.Add(pair.Value, pair.Key);
         }
 
-        public int GetClassID<T>() => _classToIdHash[typeof(T)];
+        public int GetTypeID<T>() => _typeToIdHash[typeof(T)];
+
+        public Type GetTypeByID(int classId) => _idToTypeHash[classId];
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 
 namespace Networking.ObjectsHashing
@@ -15,12 +16,20 @@ namespace Networking.ObjectsHashing
 
         public TType GetInstance<TType>(short instanceId)
         {
+            if (HasInstance<TType>(instanceId) == false)
+                throw new InvalidOperationException();
+
             TwoWayHashtable hashtable = GetTwoWayHashtable<TType>();
             return (TType) hashtable.IdToObject[instanceId];
         }
 
-        public void Register<TType>(TType tObject, short instanceID) =>
+        public void Register<TType>(TType tObject, short instanceID)
+        {
+            if (tObject == null)
+                throw new ArgumentNullException(nameof(tObject));
+
             RegisterWithId(tObject, instanceID);
+        }
 
         public short GetID<TType>(TType tObject)
         {

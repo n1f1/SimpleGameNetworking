@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using DemoGame;
 using DemoGame.ClassID;
@@ -12,7 +14,7 @@ namespace Client
 {
     class Program
     {
-        private static IClassIDConfiguration _classId;
+        private static ITypeIdConversion _typeId;
 
         static async Task Main(string[] args)
         {
@@ -30,15 +32,21 @@ namespace Client
 
             IHashedObjectsList objectsList = new HashedObjectsList();
 
-            ClassIdConfiguration classId = new ClassIdConfiguration();
-            classId.Initialize();
-            _classId = classId;
-            
-            Dictionary<int, IFactory> factories = new Dictionary<int, IFactory>();
-            factories.Add(_classId.GetClassID<MoveCommand>(), new MoveCommandFactory(objectsList));
-            factories.Add(_classId.GetClassID<Player>(), new PlayerFactory(objectsList));
+            TypeIdConversion typeId = new TypeIdConversion(
+                new Dictionary<Type, int>
+                {
+                    {typeof(Player), BitConverter.ToInt32(Encoding.UTF8.GetBytes("PLYR"))},
+                    {typeof(MoveCommand), BitConverter.ToInt32(Encoding.UTF8.GetBytes("CMVE"))}
+                });
+            _typeId = typeId;
 
-            Replicator replicator = new Replicator(new CreationReplicator(factories));
+            Dictionary<Type, IDeserialization<object>> deserialization =
+                new Dictionary<Type, IDeserialization<object>>();
+
+            deserialization.Populate(TypeToSerializationObject.Create(objectsList, _typeId));
+
+            Replicator replicator =
+                new Replicator(new CreationReplicator(_typeId, deserialization, new ReceivedReplicatedObjectMatcher()));
 
             while (true)
             {
@@ -51,7 +59,7 @@ namespace Client
                 Console.WriteLine(readInt32);
                 PacketType packetType = (PacketType) readInt32;
 
-                Console.WriteLine("Recieved " + packetType);
+                Console.WriteLine("Recieved " + packetType + " time: " + DateTime.Now.TimeOfDay);
 
                 if (packetType == PacketType.ReplicationData)
                     replicator.ProcessReplicationPacket(inputStream);

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Numerics;
 
 namespace DemoGame
@@ -9,7 +8,7 @@ namespace DemoGame
         public MoveCommand(Movement movement, Vector3 moveDelta)
         {
             MoveDelta = moveDelta;
-            Movement = movement;
+            Movement = movement ?? throw new ArgumentNullException(nameof(movement));
         }
 
         public Movement Movement { get; }
@@ -18,7 +17,6 @@ namespace DemoGame
         public void Execute()
         {
             Movement.Move(MoveDelta);
-            Console.WriteLine("move "+ Movement.Position);
         }
     }
 }

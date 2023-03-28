@@ -4,7 +4,7 @@
     {
         private readonly PacketType _type;
 
-        public PacketHeader(PacketType type)
+        protected PacketHeader(PacketType type)
         {
             _type = type;
         }

@@ -20,6 +20,7 @@ namespace Networking.PacketSender
             foreach (byte b in networkPacket.Data)
                 Console.Write(b + " ");
 
+            Console.Write(" Time: " + DateTime.Now.TimeOfDay);
             Console.WriteLine();
         }
     }
