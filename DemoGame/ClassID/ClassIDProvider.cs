@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Networking;
+using Networking.Replication.ObjectCreationReplication;
 
 namespace DemoGame.ClassID
 {

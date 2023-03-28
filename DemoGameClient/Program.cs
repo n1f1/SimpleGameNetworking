@@ -9,6 +9,11 @@ using DemoGame;
 using DemoGame.ClassID;
 using Networking;
 using Networking.ObjectsHashing;
+using Networking.Packets;
+using Networking.Replication;
+using Networking.Replication.ObjectCreationReplication;
+using Networking.Replication.Serialization;
+using Networking.StreamIO;
 
 namespace Client
 {

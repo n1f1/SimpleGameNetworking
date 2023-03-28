@@ -1,7 +1,8 @@
 using System;
 using Networking.ObjectsHashing;
+using Networking.Replication.ObjectCreationReplication;
 
-namespace Networking
+namespace Networking.Replication.Serialization
 {
     public abstract class DefaultSerialization
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Networking
+namespace Networking.StreamIO
 {
     public interface IOutputStream
     {

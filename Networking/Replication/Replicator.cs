@@ -1,6 +1,7 @@
 ﻿using System;
+using Networking.StreamIO;
 
-namespace Networking
+namespace Networking.Replication
 {
     public class Replicator
     {

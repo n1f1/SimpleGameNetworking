@@ -1,5 +1,6 @@
 using System.IO;
 using Networking.Packets;
+using Networking.StreamIO;
 
 namespace Networking.PacketSender
 {

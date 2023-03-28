@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Numerics;
 
-namespace Networking
+namespace Networking.StreamIO
 {
     public class BinaryReaderInputStream : IInputStream
     {

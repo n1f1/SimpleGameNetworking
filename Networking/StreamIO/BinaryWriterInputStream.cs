@@ -2,7 +2,7 @@
 using System.IO;
 using System.Numerics;
 
-namespace Networking
+namespace Networking.StreamIO
 {
     public class BinaryWriterOutputStream : IOutputStream
     {

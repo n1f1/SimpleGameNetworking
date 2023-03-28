@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Networking;
 using Networking.ObjectsHashing;
+using Networking.Replication.ObjectCreationReplication;
 
 namespace DemoGame
 {

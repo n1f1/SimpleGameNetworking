@@ -11,6 +11,9 @@ using Networking;
 using Networking.ObjectsHashing;
 using Networking.Packets;
 using Networking.PacketSender;
+using Networking.Replication.ObjectCreationReplication;
+using Networking.Replication.Serialization;
+using Networking.StreamIO;
 
 namespace Server
 {
@@ -36,33 +39,30 @@ namespace Server
 
             IHashedObjectsList hashedObjects = new HashedObjectsList();
 
-            TypeIdConversion typeId = new TypeIdConversion( new Dictionary<Type, int>
+            TypeIdConversion typeId = new TypeIdConversion(new Dictionary<Type, int>
             {
                 {typeof(Player), BitConverter.ToInt32(Encoding.UTF8.GetBytes("PLYR"))},
                 {typeof(MoveCommand), BitConverter.ToInt32(Encoding.UTF8.GetBytes("CMVE"))}
             });
             _typeId = typeId;
 
+            Dictionary<Type, object> serialization = new Dictionary<Type, object>();
+
+            serialization.Populate(TypeToSerializationObject.Create(hashedObjects, _typeId));
+
             INetworkPacketSender networkPacketSender = new SendingPacketsDebug(new NetworkPacketSender(outputStream));
+
+            ObjectReplicationPacketFactory replicationPacketFactory =
+                new ObjectReplicationPacketFactory(serialization, _typeId);
             
             Player player = Player.Default();
 
-            IPacketHeader packetHeader = new ReplicationPacketHeader(ReplicationType.CreateObject);
-            MemoryNetworkPacket playerPacket = new MemoryNetworkPacket(packetHeader);
-            PlayerSerialization playerSerialization = new PlayerSerialization(hashedObjects, _typeId);
-            playerPacket.OutputStream.Write(_typeId.GetTypeID<Player>());
-            playerSerialization.Serialize(player, playerPacket.OutputStream);
-            playerPacket.Close();
-            networkPacketSender.SendPacket(playerPacket);
+            INetworkPacket networkPacket = replicationPacketFactory.Create(player);
+            networkPacketSender.SendPacket(networkPacket);
 
             MoveCommand moveCommand = new MoveCommand(player.Movement, Vector3.One);
-            
-            IPacketHeader move = new ReplicationPacketHeader(ReplicationType.CreateObject);
-            MemoryNetworkPacket moveCommandPacket = new MemoryNetworkPacket(move);
-            MoveCommandSerialization moveCommandSerialization = new MoveCommandSerialization(hashedObjects, _typeId);
-            moveCommandPacket.OutputStream.Write(_typeId.GetTypeID<MoveCommand>());
-            moveCommandSerialization.Serialize(moveCommand, moveCommandPacket.OutputStream);
-            moveCommandPacket.Close();
+
+            INetworkPacket moveCommandPacket = replicationPacketFactory.Create(moveCommand);
             networkPacketSender.SendPacket(moveCommandPacket);
 
             while (true)

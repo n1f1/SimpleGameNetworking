@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Networking
+namespace Networking.StreamIO
 {
     public interface IInputStream
     {

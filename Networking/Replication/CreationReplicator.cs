@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
+using Networking.Replication.ObjectCreationReplication;
+using Networking.Replication.Serialization;
+using Networking.StreamIO;
 
-namespace Networking
+namespace Networking.Replication
 {
     public class CreationReplicator
     {
@@ -12,7 +13,8 @@ namespace Networking
         private readonly IReplicatedObjectReceiver<object> _replicatedObjectReceiver;
 
         public CreationReplicator(ITypeIdConversion typeIdConversion,
-            Dictionary<Type, IDeserialization<object>> deserializationList, IReplicatedObjectReceiver<object> replicatedObjectReceiver)
+            Dictionary<Type, IDeserialization<object>> deserializationList,
+            IReplicatedObjectReceiver<object> replicatedObjectReceiver)
         {
             _typeIdConversion = typeIdConversion;
             _deserializationList = deserializationList;
@@ -24,8 +26,7 @@ namespace Networking
             int classId = inputStream.ReadInt32();
             Type creatingType = _typeIdConversion.GetTypeByID(classId);
             IDeserialization<object> deserialization = _deserializationList[creatingType];
-            MethodInfo method = deserialization.GetType().GetMethod("Deserialize");
-            object createdObject = method.Invoke(deserialization, new[] {inputStream});
+            object createdObject = deserialization.Deserialize(inputStream);
             _replicatedObjectReceiver.Receive(createdObject);
         }
     }

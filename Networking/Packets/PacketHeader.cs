@@ -1,4 +1,6 @@
-﻿namespace Networking.Packets
+﻿using Networking.StreamIO;
+
+namespace Networking.Packets
 {
     public class PacketHeader : IPacketHeader
     {

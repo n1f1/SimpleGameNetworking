@@ -1,4 +1,4 @@
-﻿namespace Networking
+﻿namespace Networking.Replication
 {
     public enum ReplicationType
     {

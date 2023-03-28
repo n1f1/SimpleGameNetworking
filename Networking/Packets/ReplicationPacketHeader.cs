@@ -1,4 +1,7 @@
-﻿namespace Networking.Packets
+﻿using Networking.Replication;
+using Networking.StreamIO;
+
+namespace Networking.Packets
 {
     public class ReplicationPacketHeader : PacketHeader
     {

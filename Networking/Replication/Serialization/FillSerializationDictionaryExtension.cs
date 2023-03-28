@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Networking
+namespace Networking.Replication.Serialization
 {
     public static class FillSerializationDictionaryExtension
     {
-        public static void Populate(this IDictionary<Type, ISerialization<object>> dictionary,
+        public static void Populate(this IDictionary<Type, object> dictionary,
             List<(Type, object)> tuples)
         {
             foreach ((Type, object) tuple in tuples)
-                dictionary.Add(tuple.Item1, (ISerialization<object>) tuple.Item2);
+                dictionary.Add(tuple.Item1, tuple.Item2);
         }
 
         public static void Populate(this IDictionary<Type, IDeserialization<object>> dictionary,

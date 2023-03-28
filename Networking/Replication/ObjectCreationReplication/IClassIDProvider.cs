@@ -1,6 +1,6 @@
 using System;
 
-namespace Networking
+namespace Networking.Replication.ObjectCreationReplication
 {
     public interface ITypeIdConversion
     {
