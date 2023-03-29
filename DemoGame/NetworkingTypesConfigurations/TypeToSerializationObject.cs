@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using Networking;
 using Networking.ObjectsHashing;
 using Networking.Replication.ObjectCreationReplication;
 
-namespace DemoGame
+namespace DemoGame.NetworkingTypesConfigurations
 {
     public static class TypeToSerializationObject
     {
-        public static List<(Type, object)> Create(IHashedObjectsList objectsList, ITypeIdConversion typeId)
+        public static IEnumerable<(Type, object)> Create(IHashedObjectsList objectsList, ITypeIdConversion typeId)
         {
-            List<(Type, object)> tuples = new List<(Type, object)>
+            IEnumerable<(Type, object)> tuples = new List<(Type, object)>
             {
                 (typeof(Player), new PlayerSerialization(objectsList, typeId)),
                 (typeof(MoveCommand), new MoveCommandSerialization(objectsList, typeId))

@@ -1,6 +1,6 @@
 namespace Networking
 {
-    public interface IReplicatedObjectReceiver<T>
+    public interface IReplicatedObjectReceiver<in T>
     {
         void Receive(T createdObject);
     }

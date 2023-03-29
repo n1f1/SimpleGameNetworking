@@ -1,6 +1,6 @@
 namespace DemoGame
 {
-    internal interface ICommand
+    public interface ICommand
     {
         void Execute();
     }

@@ -17,6 +17,7 @@ namespace Networking.Replication
             ReplicationType replicationType = (ReplicationType) inputStream.ReadInt32();
 
             Console.WriteLine("Received " + replicationType);
+            
             if (replicationType is ReplicationType.CreateObject)
                 _creationReplicator.Create(inputStream);
             else

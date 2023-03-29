@@ -25,6 +25,10 @@ namespace Networking.Replication
         {
             int classId = inputStream.ReadInt32();
             Type creatingType = _typeIdConversion.GetTypeByID(classId);
+
+            if (_deserializationList.ContainsKey(creatingType) == false)
+                throw new InvalidOperationException();
+            
             IDeserialization<object> deserialization = _deserializationList[creatingType];
             object createdObject = deserialization.Deserialize(inputStream);
             _replicatedObjectReceiver.Receive(createdObject);

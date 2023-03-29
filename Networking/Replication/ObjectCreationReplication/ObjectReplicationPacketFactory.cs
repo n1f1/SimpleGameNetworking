@@ -21,7 +21,12 @@ namespace Networking.Replication.ObjectCreationReplication
         {
             IPacketHeader header = new ReplicationPacketHeader(ReplicationType.CreateObject);
             MemoryNetworkPacket packet = new MemoryNetworkPacket(header);
-            object serialization = _serialization[typeof(TObject)];
+            Type type = typeof(TObject);
+
+            if (_serialization.ContainsKey(type) == false)
+                throw new InvalidOperationException();
+
+            object serialization = _serialization[type];
             
             MethodInfo method = serialization.GetType().GetMethod("Serialize");
             packet.OutputStream.Write(_typeIdConversion.GetTypeID<TObject>());

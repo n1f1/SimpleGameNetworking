@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace DemoGame
 {
@@ -24,6 +25,7 @@ namespace DemoGame
         public void Move(Vector3 delta)
         {
             Position += delta;
+            Console.WriteLine($"Player move to {Position} !");
         }
     }
 }

@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Numerics;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using DemoGame;
 using DemoGame.ClassID;
-using Networking;
+using DemoGame.NetworkingTypesConfigurations;
 using Networking.ObjectsHashing;
 using Networking.Packets;
 using Networking.PacketSender;
+using Networking.Replication;
 using Networking.Replication.ObjectCreationReplication;
 using Networking.Replication.Serialization;
 using Networking.StreamIO;
@@ -19,8 +20,6 @@ namespace Server
 {
     class Program
     {
-        private static ITypeIdConversion _typeId;
-
         static async Task Main(string[] args)
         {
             TcpListener tcpListener = new TcpListener(IPAddress.Any, 55555);
@@ -34,47 +33,59 @@ namespace Server
             Console.WriteLine("DemoGameClient connected...");
 
             NetworkStream networkStream = tcpClient.GetStream();
-            IInputStream inputStream = new BinaryReaderInputStream(networkStream);
-            IOutputStream outputStream = new BinaryWriterOutputStream(networkStream);
+            IInputStream inputStream1 = new BinaryReaderInputStream(networkStream);
 
-            IHashedObjectsList hashedObjects = new HashedObjectsList();
-
-            TypeIdConversion typeId = new TypeIdConversion(new Dictionary<Type, int>
-            {
-                {typeof(Player), BitConverter.ToInt32(Encoding.UTF8.GetBytes("PLYR"))},
-                {typeof(MoveCommand), BitConverter.ToInt32(Encoding.UTF8.GetBytes("CMVE"))}
-            });
-            _typeId = typeId;
+            ITypeIdConversion typeId = new TypeIdConversion(
+                new Dictionary<Type, int>().PopulateDictionaryFromTuple(SerializableTypesIdMap.Get()));
 
             Dictionary<Type, object> serialization = new Dictionary<Type, object>();
+            IEnumerable<(Type, object)> typeToSerialization = TypeToSerializationObject.Create(new HashedObjectsList(), typeId);
+            serialization.PopulateDictionaryFromTuple(typeToSerialization);
 
-            serialization.Populate(TypeToSerializationObject.Create(hashedObjects, _typeId));
+            INetworkPacketSender networkPacketSender = new SendingPacketsDebug(new NetworkPacketSender(new BinaryWriterOutputStream(networkStream)));
 
-            INetworkPacketSender networkPacketSender = new SendingPacketsDebug(new NetworkPacketSender(outputStream));
+            var replicationPacketFactory = new ObjectReplicationPacketFactory(serialization, typeId);
 
-            ObjectReplicationPacketFactory replicationPacketFactory =
-                new ObjectReplicationPacketFactory(serialization, _typeId);
-            
+
+            Dictionary<Type, IDeserialization<object>> deserialization = new();
+            deserialization.PopulateDictionary(typeToSerialization);
+
+            Dictionary<Type, object> receivers = new Dictionary<Type, object>
+            {
+                {typeof(MoveCommand), new CommandsResendReceiver(networkPacketSender, replicationPacketFactory)},
+            };
+
+            var replicator = new Replicator(new CreationReplicator(typeId, deserialization,
+                new ReceivedReplicatedObjectMatcher(receivers)));
+            IInputStream inputStream = inputStream1;
+
             Player player = Player.Default();
 
             INetworkPacket networkPacket = replicationPacketFactory.Create(player);
             networkPacketSender.SendPacket(networkPacket);
-
-            MoveCommand moveCommand = new MoveCommand(player.Movement, Vector3.One);
-
-            INetworkPacket moveCommandPacket = replicationPacketFactory.Create(moveCommand);
-            networkPacketSender.SendPacket(moveCommandPacket);
-
+            
             while (true)
             {
-                Console.WriteLine("Receiving...");
+                ReceivePackets(inputStream, replicator);
+                Task.Yield();
+            }
+        }
 
-                while (inputStream.NotEmpty() == false)
-                    Task.Yield();
+        private static void ReceivePackets(IInputStream inputStream, Replicator replicator)
+        {
+            if (inputStream.NotEmpty() == false)
+                return;
 
-                int read = inputStream.ReadInt32();
+            int readInt32 = inputStream.ReadInt32();
+            PacketType packetType = (PacketType) readInt32;
 
-                Console.WriteLine("Received " + read);
+            Console.WriteLine("\nReceived " + packetType + " time: " + DateTime.Now.TimeOfDay);
+
+            if (packetType == PacketType.ReplicationData)
+                replicator.ProcessReplicationPacket(inputStream);
+            else
+            {
+                throw new InvalidOperationException();
             }
         }
     }

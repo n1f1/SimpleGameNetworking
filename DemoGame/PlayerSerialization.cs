@@ -13,17 +13,20 @@ namespace DemoGame
         {
         }
 
-        public void Serialize(Player inObject, IOutputStream outputStream)
+        public void Serialize(Player player, IOutputStream outputStream)
         {
-            Movement movement = inObject.Movement;
-            outputStream.Write(inObject.Name);
-            outputStream.Write(inObject.Points);
+            Movement movement = player.Movement;
+            outputStream.Write(HashedObjects.Register(player));
+            outputStream.Write(player.Name);
+            outputStream.Write(player.Points);
             outputStream.Write(movement.Position);
             outputStream.Write(HashedObjects.Register(movement));
         }
 
         public Player Deserialize(IInputStream inputStream)
         {
+            short playerInstanceId = inputStream.ReadInt16();
+            
             Player player = new Player
             {
                 Name = inputStream.ReadString(),
@@ -31,6 +34,7 @@ namespace DemoGame
                 Movement = new Movement(inputStream.ReadVector3())
             };
 
+            HashedObjects.Register(player, playerInstanceId);
             HashedObjects.Register(player.Movement, inputStream.ReadInt16());
 
             return player;
