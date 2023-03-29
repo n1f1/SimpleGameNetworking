@@ -6,7 +6,7 @@ namespace Networking.Packets
     {
         private readonly PacketType _type;
 
-        protected PacketHeader(PacketType type)
+        public PacketHeader(PacketType type)
         {
             _type = type;
         }

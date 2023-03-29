@@ -18,15 +18,13 @@ namespace Client
 {
     class Program
     {
+        private static int _id;
+
         static async Task Main(string[] args)
         {
             using TcpClient tcpClient = new TcpClient();
 
-            Console.WriteLine("Try connect...");
-
             await tcpClient.ConnectAsync("192.168.1.87", 55555);
-
-            Console.WriteLine("Connected...");
 
             NetworkStream networkStream = tcpClient.GetStream();
             IInputStream inputStream = new BinaryReaderInputStream(networkStream);
@@ -48,7 +46,7 @@ namespace Client
                 new ObjectReplicationPacketFactory(serialization, typeId);
 
             Game game = new Game(networkPacketSender, replicationPacketFactory);
-            
+
             Dictionary<Type, object> receivers = new Dictionary<Type, object>
             {
                 {typeof(MoveCommand), new CommandsReceiver()},
@@ -58,12 +56,12 @@ namespace Client
             Replicator replicator =
                 new Replicator(new CreationReplicator(typeId, deserialization,
                     new ReceivedReplicatedObjectMatcher(receivers)));
-            
+
             while (true)
             {
                 ReceivePackets(inputStream, replicator);
                 game.Update();
-                Task.Yield();
+                //Task.Yield();
             }
         }
 
@@ -77,14 +75,23 @@ namespace Client
 
             Console.WriteLine("\nReceived " + packetType + " time: " + DateTime.Now.TimeOfDay);
 
-            if (packetType == PacketType.ReplicationData)
-                replicator.ProcessReplicationPacket(inputStream);
-            else
+            switch (packetType)
             {
-                throw new InvalidOperationException();
+                case PacketType.ReplicationData:
+                    replicator.ProcessReplicationPacket(inputStream);
+                    break;
+                case PacketType.Handshake:
+                    GetHandshake(inputStream);
+                    break;
+                default:
+                    throw new InvalidOperationException();
             }
+        }
 
-            Console.WriteLine("Receive " + packetType);
+        private static void GetHandshake(IInputStream inputStream)
+        {
+            _id = inputStream.ReadInt32();
+            Console.WriteLine("Connected! client id: " + _id);
         }
     }
 }

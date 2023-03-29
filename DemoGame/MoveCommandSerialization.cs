@@ -1,5 +1,5 @@
+using System;
 using System.Numerics;
-using Networking;
 using Networking.ObjectsHashing;
 using Networking.Replication.ObjectCreationReplication;
 using Networking.Replication.Serialization;
@@ -27,6 +27,7 @@ namespace DemoGame
             short movementInstanceID = inputStream.ReadInt16();
             Movement movement = HashedObjects.GetInstance<Movement>(movementInstanceID);
             Vector3 moveDelta = inputStream.ReadVector3();
+            Console.Write($"movement id: {movementInstanceID} for {movement.Position}");
 
             return new MoveCommand(movement, moveDelta);
         }

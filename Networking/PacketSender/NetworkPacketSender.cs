@@ -1,5 +1,4 @@
-﻿using System;
-using Networking.StreamIO;
+﻿using Networking.StreamIO;
 
 namespace Networking.PacketSender
 {
@@ -11,12 +10,10 @@ namespace Networking.PacketSender
         {
             _networkOutputStream = networkOutputStream;
         }
-        
+
         public void SendPacket(INetworkPacket networkPacket)
         {
-            Console.Write(" Time: " + DateTime.Now.TimeOfDay);
             _networkOutputStream.Write(networkPacket.Data);
-            Console.Write(" Time: " + DateTime.Now.TimeOfDay);
         }
     }
 }

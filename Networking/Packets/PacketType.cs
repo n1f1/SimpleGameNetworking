@@ -2,6 +2,7 @@
 {
     public enum PacketType
     {
+        Handshake,
         ReplicationData
     }
 }

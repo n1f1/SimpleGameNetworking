@@ -4,7 +4,7 @@ namespace Networking.ObjectsHashing
     {
         bool HasInstance<TType>(short instanceId);
         TType GetInstance<TType>(short instanceId);
-        void Register<TType>(TType tObject, short instanceID);
+        void RegisterNew<TType>(TType tObject, short instanceID);
         short GetID<TType>(TType tObject);
         short Register<TType>(TType tObject);
     }

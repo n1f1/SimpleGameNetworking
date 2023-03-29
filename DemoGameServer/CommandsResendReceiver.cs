@@ -9,24 +9,28 @@ namespace Server
 {
     internal class CommandsResendReceiver : IReplicatedObjectReceiver<ICommand>
     {
-        private readonly INetworkPacketSender _networkPacketSender;
         private readonly ObjectReplicationPacketFactory _replicationPacketFactory;
+        private readonly Room _room;
 
-        public CommandsResendReceiver(INetworkPacketSender networkPacketSender,
-            ObjectReplicationPacketFactory replicationPacketFactory)
+        public CommandsResendReceiver(Room room, ObjectReplicationPacketFactory replicationPacketFactory)
         {
             _replicationPacketFactory = replicationPacketFactory;
-            _networkPacketSender = networkPacketSender;
+            _room = room ?? throw new ArgumentNullException(nameof(room));
         }
 
         public void Receive(ICommand command)
         {
-            Type replicatingObject = command.GetType();
-            Type factoryType = _replicationPacketFactory.GetType();
-            MethodInfo methodInfo = factoryType.GetMethod(nameof(_replicationPacketFactory.Create))
-                .MakeGenericMethod(replicatingObject);
-            INetworkPacket packet = (INetworkPacket) methodInfo.Invoke(_replicationPacketFactory, new object[] {command});
-            _networkPacketSender.SendPacket(packet);
+            foreach (Client client in _room.Clients)
+            {
+                Type replicatingObject = command.GetType();
+                Type factoryType = _replicationPacketFactory.GetType();
+                MethodInfo methodInfo = factoryType.GetMethod(nameof(_replicationPacketFactory.Create))
+                    .MakeGenericMethod(replicatingObject);
+                INetworkPacket packet =
+                    (INetworkPacket) methodInfo.Invoke(_replicationPacketFactory, new object[] {command});
+
+                client.Sender.SendPacket(packet);
+            }
         }
     }
 }

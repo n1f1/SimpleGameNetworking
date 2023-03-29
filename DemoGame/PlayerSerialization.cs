@@ -1,4 +1,5 @@
-﻿using Networking;
+﻿using System;
+using Networking;
 using Networking.ObjectsHashing;
 using Networking.Replication.ObjectCreationReplication;
 using Networking.Replication.Serialization;
@@ -34,8 +35,9 @@ namespace DemoGame
                 Movement = new Movement(inputStream.ReadVector3())
             };
 
-            HashedObjects.Register(player, playerInstanceId);
-            HashedObjects.Register(player.Movement, inputStream.ReadInt16());
+            HashedObjects.RegisterNew(player, playerInstanceId);
+            HashedObjects.RegisterNew(player.Movement, inputStream.ReadInt16());
+            Console.Write($" id: {playerInstanceId} position: {player.Movement.Position}");
 
             return player;
         }

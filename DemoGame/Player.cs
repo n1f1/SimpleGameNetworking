@@ -25,7 +25,6 @@ namespace DemoGame
         public void Move(Vector3 delta)
         {
             Position += delta;
-            Console.WriteLine($"Player move to {Position} !");
         }
     }
 }

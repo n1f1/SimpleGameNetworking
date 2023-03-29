@@ -14,6 +14,12 @@ namespace Networking.ObjectsHashing
             return hashtable.IdToObject.Contains(instanceId);
         }
 
+        public bool HasInstance<TType>(TType tObject)
+        {
+            TwoWayHashtable hashtable = GetTwoWayHashtable<TType>();
+            return hashtable.ObjectToId.Contains(tObject);
+        }
+
         public TType GetInstance<TType>(short instanceId)
         {
             if (HasInstance<TType>(instanceId) == false)
@@ -23,10 +29,13 @@ namespace Networking.ObjectsHashing
             return (TType) hashtable.IdToObject[instanceId];
         }
 
-        public void Register<TType>(TType tObject, short instanceID)
+        public void RegisterNew<TType>(TType tObject, short instanceID)
         {
             if (tObject == null)
                 throw new ArgumentNullException(nameof(tObject));
+
+            if (HasInstance(tObject))
+                throw new InvalidOperationException();
 
             RegisterWithId(tObject, instanceID);
         }
@@ -39,7 +48,7 @@ namespace Networking.ObjectsHashing
         }
 
         public short Register<TType>(TType tObject) =>
-            RegisterWithId(tObject, ++_id);
+            HasInstance(tObject) ? GetID(tObject) : RegisterWithId(tObject, ++_id);
 
         private short RegisterWithId<TType>(TType tObject, short id)
         {
