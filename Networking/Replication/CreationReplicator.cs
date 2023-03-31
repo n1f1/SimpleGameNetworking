@@ -6,7 +6,7 @@ using Networking.StreamIO;
 
 namespace Networking.Replication
 {
-    public class CreationReplicator
+    public class CreationReplicator : ICreationPacketHandler
     {
         private readonly ITypeIdConversion _typeIdConversion;
         private readonly Dictionary<Type, IDeserialization<object>> _deserializationList;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using networking;
 using Networking.Packets;
 using Networking.PacketSender;
 using Networking.StreamIO;
@@ -26,7 +27,7 @@ namespace Networking
         }
 
         public int Id { get; }
-        public bool Disconnected => CheckDisconnected();
+        public bool IsConnected => _tcpClient.Client.IsConnected();
 
         public void Welcome()
         {
@@ -35,26 +36,6 @@ namespace Networking
             memoryNetworkPacket.OutputStream.Write(Id);
             memoryNetworkPacket.Close();
             Sender.SendPacket(memoryNetworkPacket);
-        }
-
-        private bool CheckDisconnected()
-        {
-            /*if (_tcpClient.Client.Poll(0, SelectMode.SelectWrite) && !_tcpClient.Client.Poll(0, SelectMode.SelectError))
-            {
-                byte[] buff = new byte[1];
-
-                try
-                {
-                    if (_tcpClient.Client.Receive(buff, SocketFlags.Peek) == 0)
-                        return true;
-                }
-                catch
-                {
-                    return true;
-                }
-            }*/
-
-            return false;
         }
     }
 }

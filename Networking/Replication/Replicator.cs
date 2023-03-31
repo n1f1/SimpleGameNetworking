@@ -3,11 +3,11 @@ using Networking.StreamIO;
 
 namespace Networking.Replication
 {
-    public class Replicator
+    public class ReplicationPacketRead : IReplicationPacketRead
     {
-        private readonly CreationReplicator _creationReplicator;
+        private readonly ICreationPacketHandler _creationReplicator;
 
-        public Replicator(CreationReplicator creationReplicator)
+        public ReplicationPacketRead(ICreationPacketHandler creationReplicator)
         {
             _creationReplicator = creationReplicator;
         }
