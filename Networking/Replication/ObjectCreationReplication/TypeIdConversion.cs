@@ -14,7 +14,7 @@ namespace Networking.Replication.ObjectCreationReplication
 
             _idToTypeHash = new Dictionary<int, Type>();
 
-            foreach (KeyValuePair<Type, int> pair in _typeToIdHash)
+            foreach (KeyValuePair<Type, int> pair in _typeToIdHash) 
                 _idToTypeHash.Add(pair.Value, pair.Key);
         }
 

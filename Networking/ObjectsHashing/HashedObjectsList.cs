@@ -29,7 +29,7 @@ namespace Networking.ObjectsHashing
             return (TType) hashtable.IdToObject[instanceId];
         }
 
-        public void RegisterNew<TType>(TType tObject, short instanceID)
+        public void RegisterWithID<TType>(TType tObject, short instanceID)
         {
             if (tObject == null)
                 throw new ArgumentNullException(nameof(tObject));
@@ -47,7 +47,7 @@ namespace Networking.ObjectsHashing
             return (short) hashtable.ObjectToId[tObject];
         }
 
-        public short Register<TType>(TType tObject) =>
+        public short RegisterOrGetRegistered<TType>(TType tObject) =>
             HasInstance(tObject) ? GetID(tObject) : RegisterWithId(tObject, ++_id);
 
         private short RegisterWithId<TType>(TType tObject, short id)
