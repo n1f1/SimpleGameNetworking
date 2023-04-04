@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Networking.StreamIO
+﻿namespace Networking.StreamIO
 {
     public interface IInputStream
     {
@@ -8,7 +6,8 @@ namespace Networking.StreamIO
         int ReadInt32();
         byte[] ReadBytes(int bytes);
         short ReadInt16();
-        Vector3 ReadVector3();
         string ReadString();
+        byte[] ReadAll();
+        float ReadSingle();
     }
 }

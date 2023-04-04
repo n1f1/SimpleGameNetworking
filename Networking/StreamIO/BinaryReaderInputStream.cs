@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
-using System.Numerics;
+using Networking.PacketSender;
+using UnityEngine;
 
 namespace Networking.StreamIO
 {
@@ -19,19 +20,35 @@ namespace Networking.StreamIO
         public bool NotEmpty() =>
             _networkStream.DataAvailable;
 
-        public int ReadInt32() => 
+        public int ReadInt32() =>
             _binaryReader.ReadInt32();
 
         public short ReadInt16() =>
             _binaryReader.ReadInt16();
-        
+
         public string ReadString() =>
             _binaryReader.ReadString();
 
-        public Vector3 ReadVector3() =>
-            new(_binaryReader.ReadSingle(), _binaryReader.ReadSingle(), _binaryReader.ReadSingle());
-
         public byte[] ReadBytes(int bytes) =>
             _binaryReader.ReadBytes(bytes);
+
+        public float ReadSingle() =>
+            _binaryReader.ReadSingle();
+
+        public byte[] ReadAll()
+        {
+            byte[] readBuffer = new byte[1500];
+            using MemoryStream stream = new MemoryStream();
+
+            do
+            {
+                int numberOfBytesRead = _networkStream.Read(readBuffer, 0, readBuffer.Length);
+                stream.Write(readBuffer, 0, numberOfBytesRead);
+            } while (_networkStream.DataAvailable);
+
+            stream.Seek(0, SeekOrigin.Begin);
+
+            return stream.ReadAll();
+        }
     }
 }

@@ -18,36 +18,22 @@ namespace Networking.StreamIO
         public bool NotEmpty() =>
             _networkStream.Length != 0;
 
-        public void Write(int data)
-        {
+        public void Write(int data) => 
             _binaryWriter.Write(data);
-        }
 
-        public void Write(short data)
-        {
+        public void Write(float data) => 
             _binaryWriter.Write(data);
-        }
 
-        public void Write(string write)
-        {
+        public void Write(short data) => 
+            _binaryWriter.Write(data);
+
+        public void Write(string write) => 
             _binaryWriter.Write(write);
-        }
 
-        public void Write(Vector3 vector3)
-        {
-            _binaryWriter.Write(vector3.X);
-            _binaryWriter.Write(vector3.Y);
-            _binaryWriter.Write(vector3.Z);
-        }
-
-        public void Write(ReadOnlySpan<byte> bytes)
-        {
+        public void Write(ReadOnlySpan<byte> bytes) => 
             _binaryWriter.Write(bytes);
-        }
 
-        public void Close()
-        {
+        public void Close() => 
             _binaryWriter.Close();
-        }
     }
 }

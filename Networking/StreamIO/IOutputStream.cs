@@ -9,7 +9,7 @@ namespace Networking.StreamIO
         void Write(int data);
         void Write(short data);
         void Write(string write);
-        void Write(Vector3 vector3);
+        void Write(float data);
         void Write(ReadOnlySpan<byte> bytes);
         void Close();
     }

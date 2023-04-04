@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace networking
+namespace Networking
 {
     public static class SocketExtensions
     {

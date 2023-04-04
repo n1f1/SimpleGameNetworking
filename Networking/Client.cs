@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Sockets;
-using networking;
 using Networking.Packets;
 using Networking.PacketSender;
 using Networking.StreamIO;
