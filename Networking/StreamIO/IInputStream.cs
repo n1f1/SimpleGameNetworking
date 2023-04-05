@@ -9,5 +9,6 @@
         string ReadString();
         byte[] ReadAll();
         float ReadSingle();
+        long ReadInt64();
     }
 }

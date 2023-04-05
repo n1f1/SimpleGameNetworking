@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Numerics;
 
 namespace Networking.StreamIO
 {
@@ -19,6 +18,9 @@ namespace Networking.StreamIO
             _networkStream.Length != 0;
 
         public void Write(int data) => 
+            _binaryWriter.Write(data);
+
+        public void Write(long data) => 
             _binaryWriter.Write(data);
 
         public void Write(float data) => 

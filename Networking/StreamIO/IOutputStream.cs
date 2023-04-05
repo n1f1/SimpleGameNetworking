@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 
 namespace Networking.StreamIO
 {
@@ -7,6 +6,7 @@ namespace Networking.StreamIO
     {
         bool NotEmpty();
         void Write(int data);
+        void Write(long data);
         void Write(short data);
         void Write(string write);
         void Write(float data);

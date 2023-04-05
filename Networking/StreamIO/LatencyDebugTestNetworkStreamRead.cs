@@ -22,23 +22,22 @@ namespace Networking.StreamIO
             if (inputStream.NotEmpty())
                 AddToPacketQueue(inputStream);
 
-            SendReadyPackets();
+            if (_packets.Count > 0)
+                SendReadyPacket();
         }
 
-        private void SendReadyPackets()
+        private void SendReadyPacket()
         {
-            for (LinkedListNode<TestLatencyPacket> node = _packets.First; node != null; node = node.Next)
-            {
-                TestLatencyPacket packet = node.Value;
+            LinkedListNode<TestLatencyPacket> node = _packets.First;
+            TestLatencyPacket packet = node.Value;
 
-                if (packet.ReceiveTime < DateTime.Now)
-                {
-                    _packets.Remove(node);
-                    MemoryStream memoryStream = new MemoryStream(packet.Data.Length);
-                    memoryStream.Write(packet.Data);
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-                    _networkStreamRead.ReadNetworkStream(new MemoryInputStream(memoryStream));
-                }
+            if (packet.ReceiveTime < DateTime.Now)
+            {
+                _packets.Remove(node);
+                MemoryStream memoryStream = new MemoryStream(packet.Data.Length);
+                memoryStream.Write(packet.Data);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                _networkStreamRead.ReadNetworkStream(new MemoryInputStream(memoryStream));
             }
         }
 

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net.Sockets;
 using Networking.PacketSender;
-using UnityEngine;
 
 namespace Networking.StreamIO
 {
@@ -34,6 +33,9 @@ namespace Networking.StreamIO
 
         public float ReadSingle() =>
             _binaryReader.ReadSingle();
+
+        public long ReadInt64() => 
+            _binaryReader.ReadInt64();
 
         public byte[] ReadAll()
         {

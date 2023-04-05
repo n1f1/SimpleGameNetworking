@@ -15,10 +15,8 @@ namespace Networking
             _binaryReader = new BinaryReader(stream);
         }
 
-        public bool NotEmpty()
-        {
-            return _stream.Length != _stream.Position;
-        }
+        public bool NotEmpty() => 
+            _stream.Length != _stream.Position;
 
         public int ReadInt32() =>
             _binaryReader.ReadInt32();
@@ -37,5 +35,8 @@ namespace Networking
 
         public float ReadSingle() =>
             _binaryReader.ReadSingle();
+
+        public long ReadInt64() => 
+            _binaryReader.ReadInt64();
     }
 }
