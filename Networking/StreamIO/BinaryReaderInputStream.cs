@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
-using Networking.PacketSender;
+using Networking.PacketSend;
 
 namespace Networking.StreamIO
 {

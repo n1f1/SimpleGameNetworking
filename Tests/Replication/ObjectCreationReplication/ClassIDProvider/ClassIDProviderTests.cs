@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Networking.Replication.ObjectCreationReplication;
+using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using NUnit.Framework;
 
 namespace Tests.Replication.ObjectCreationReplication.ClassIDProvider

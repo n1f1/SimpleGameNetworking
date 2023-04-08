@@ -1,5 +1,5 @@
 using System;
-using Networking.Replication.ObjectCreationReplication;
+using Networking.PacketReceive.Replication.ObjectCreationReplication;
 
 namespace Tests.Replication.ObjectCreationReplication.ClassIDProvider.Support
 {

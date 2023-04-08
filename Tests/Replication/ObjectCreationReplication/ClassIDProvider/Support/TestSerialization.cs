@@ -1,4 +1,4 @@
-using Networking.Replication.Serialization;
+using Networking.PacketReceive.Replication.Serialization;
 using Networking.StreamIO;
 
 namespace Tests.Replication.ObjectCreationReplication.ClassIDProvider.Support

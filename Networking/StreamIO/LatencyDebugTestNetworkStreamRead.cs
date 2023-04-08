@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Networking.PacketReceive;
 using Random = System.Random;
 
 namespace Networking.StreamIO
@@ -10,9 +11,20 @@ namespace Networking.StreamIO
         private readonly INetworkStreamRead _networkStreamRead;
         private readonly LinkedList<TestLatencyPacket> _packets = new();
         private readonly Random _random;
+        private readonly int _baseLatencyMilliseconds;
+        private readonly int _jitterDeltaMilliseconds;
 
-        public LatencyDebugTestNetworkStreamRead(INetworkStreamRead networkStreamRead)
+        public LatencyDebugTestNetworkStreamRead(INetworkStreamRead networkStreamRead, int baseLatencyMilliseconds,
+            int jitterDeltaMilliseconds)
         {
+            if (baseLatencyMilliseconds < 0)
+                throw new ArgumentOutOfRangeException(nameof(baseLatencyMilliseconds));
+
+            if (jitterDeltaMilliseconds < 0 || jitterDeltaMilliseconds > baseLatencyMilliseconds)
+                throw new ArgumentOutOfRangeException(nameof(baseLatencyMilliseconds));
+
+            _jitterDeltaMilliseconds = jitterDeltaMilliseconds;
+            _baseLatencyMilliseconds = baseLatencyMilliseconds;
             _networkStreamRead = networkStreamRead ?? throw new ArgumentNullException(nameof(networkStreamRead));
             _random = new Random();
         }
@@ -42,13 +54,13 @@ namespace Networking.StreamIO
         }
 
         private void AddToPacketQueue(IInputStream inputStream) =>
-            _packets.AddLast(new TestLatencyPacket(inputStream.ReadAll(), DateTime.Now + GetRandomLatency()));
+            _packets.AddLast(new TestLatencyPacket(inputStream.ReadAll(), DateTime.Now + GetLatency()));
 
-        private TimeSpan GetRandomLatency()
+        private TimeSpan GetLatency()
         {
-            int value = _random.Next() % 1000;
+            int jitter = _random.Next() % _jitterDeltaMilliseconds;
 
-            return TimeSpan.FromMilliseconds(value);
+            return TimeSpan.FromMilliseconds(_baseLatencyMilliseconds + jitter);
         }
     }
 }

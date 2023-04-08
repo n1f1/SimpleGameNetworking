@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Networking.PacketSender;
-using Networking.Replication.ObjectCreationReplication;
+using Networking.PacketReceive.Replication.ObjectCreationReplication;
+using Networking.PacketSend;
 using NUnit.Framework;
 using Tests.Replication.ObjectCreationReplication.ClassIDProvider.Support;
 
