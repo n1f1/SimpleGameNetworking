@@ -58,7 +58,7 @@ namespace Networking.StreamIO
 
         private TimeSpan GetLatency()
         {
-            int jitter = _random.Next() % _jitterDeltaMilliseconds;
+            int jitter = _jitterDeltaMilliseconds != 0 ? _random.Next() % _jitterDeltaMilliseconds : 0;
 
             return TimeSpan.FromMilliseconds(_baseLatencyMilliseconds + jitter);
         }

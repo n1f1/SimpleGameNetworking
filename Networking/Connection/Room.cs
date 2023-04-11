@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Networking.Connection
 {
@@ -6,7 +7,7 @@ namespace Networking.Connection
     {
         private readonly List<Client> _clients = new();
         
-        public IEnumerable<Client> Clients => _clients;
+        public IEnumerable<Client> Clients => _clients.Where(client => client.IsConnected);
 
         public void Add(Client client)
         {
