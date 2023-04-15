@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Networking.Connection
 {
-    public class ServerConnection
+    public class ServerConnection : IServerConnection
     {
         private readonly IServerConnectionView _serverConnectionView;
         private TcpClient _tcpClient;

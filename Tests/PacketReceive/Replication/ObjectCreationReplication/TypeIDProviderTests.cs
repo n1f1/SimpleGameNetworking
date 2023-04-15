@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Networking.PacketReceive.Replication.ObjectCreationReplication;
 using NUnit.Framework;
 
-namespace Tests.Replication.ObjectCreationReplication.ClassIDProvider
+namespace Tests.PacketReceive.Replication.ObjectCreationReplication
 {
-    public class ClassIDProviderTests
+    public class TypeIDProviderTests
     {
         [Test]
         public void CanGetAndRemoveByAddedID()

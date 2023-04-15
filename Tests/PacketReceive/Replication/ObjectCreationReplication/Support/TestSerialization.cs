@@ -1,7 +1,7 @@
 using Networking.PacketReceive.Replication.Serialization;
 using Networking.StreamIO;
 
-namespace Tests.Replication.ObjectCreationReplication.ClassIDProvider.Support
+namespace Tests.PacketReceive.Replication.ObjectCreationReplication.Support
 {
     public class TestSerialization<T> : ISerialization<T>
     {
@@ -10,6 +10,7 @@ namespace Tests.Replication.ObjectCreationReplication.ClassIDProvider.Support
         public void Serialize(T inObject, IOutputStream outputStream)
         {
             Serialized = true;
+            outputStream.Write(1);
         }
     }
 }

@@ -7,12 +7,15 @@ namespace Networking.StreamIO
     {
         private readonly Stream _networkStream;
         private readonly BinaryWriter _binaryWriter;
+        private bool _closed;
 
         public BinaryWriterOutputStream(Stream networkStream)
         {
             _networkStream = networkStream ?? throw new ArgumentNullException(nameof(networkStream));
             _binaryWriter = new BinaryWriter(networkStream);
         }
+
+        public bool Closed => _closed;
 
         public bool NotEmpty() =>
             _networkStream.Length != 0;
@@ -35,7 +38,10 @@ namespace Networking.StreamIO
         public void Write(ReadOnlySpan<byte> bytes) => 
             _binaryWriter.Write(bytes);
 
-        public void Close() => 
+        public void Close()
+        {
             _binaryWriter.Close();
+            _closed = true;
+        }
     }
 }

@@ -8,11 +8,9 @@ namespace Networking.Connection
 {
     public class Client
     {
-        private TcpClient _tcpClient;
-        private NetworkStream _networkStream;
-        public IInputStream InputStream { get; }
-        private IOutputStream _outputStream;
-        public INetworkPacketSender Sender { get; }
+        private readonly TcpClient _tcpClient;
+        private readonly NetworkStream _networkStream;
+        private readonly IOutputStream _outputStream;
 
         public Client(TcpClient tcpClient, int id)
         {
@@ -25,6 +23,8 @@ namespace Networking.Connection
             Sender = new SendingPacketsDebug(new NetworkPacketSender(_outputStream));
         }
 
+        public IInputStream InputStream { get; }
+        public INetworkPacketSender Sender { get; }
         public int Id { get; }
         public bool IsConnected => _tcpClient.Client.IsConnected();
 

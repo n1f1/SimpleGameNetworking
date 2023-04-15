@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Networking.PacketSend;
 using Networking.PacketSend.Packets;
@@ -9,27 +7,13 @@ namespace Networking.PacketReceive.Replication.ObjectCreationReplication
 {
     public class ObjectReplicationPacketFactory
     {
-        private readonly Dictionary<Type, object> _serialization;
+        private readonly IGenericInterfaceList _serialization;
         private readonly ITypeIdConversion _typeIdConversion;
 
-        public ObjectReplicationPacketFactory(Dictionary<Type, object> serialization,
+        public ObjectReplicationPacketFactory(IGenericInterfaceList serialization,
             ITypeIdConversion typeIdConversion)
         {
-            foreach (var keyValuePair in serialization)
-            {
-                Type value = keyValuePair.Value.GetType();
-                Type key = keyValuePair.Key;
-                
-                if (value.GetInterfaces().Any(interfaceType =>
-                    interfaceType.IsGenericType &&
-                    interfaceType.GetGenericArguments()[0] == key))
-                    continue;
-
-                throw new ArgumentException(
-                    "Serialization dictionary must contain <Type, object> where object is ISerialization<Type>");
-            }
-
-            _serialization = serialization;
+            _serialization = serialization ?? throw new ArgumentNullException(nameof(serialization));
             _typeIdConversion = typeIdConversion ?? throw new ArgumentNullException(nameof(typeIdConversion));
         }
 
@@ -39,10 +23,10 @@ namespace Networking.PacketReceive.Replication.ObjectCreationReplication
             MemoryNetworkPacket packet = new MemoryNetworkPacket(header);
             Type type = typeof(TObject);
 
-            if (_serialization.ContainsKey(type) == false)
+            if (_serialization.ContainsForType(type) == false)
                 throw new InvalidOperationException();
 
-            object serialization = _serialization[type];
+            object serialization = _serialization.GetForType(type);
 
             MethodInfo method = serialization.GetType().GetMethod("Serialize");
             packet.OutputStream.Write(_typeIdConversion.GetTypeID<TObject>());

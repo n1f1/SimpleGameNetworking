@@ -6,15 +6,13 @@ namespace Networking.PacketSend
 {
     public class MemoryNetworkPacket : INetworkPacket
     {
-        private readonly IPacketHeader _packetHeader;
         private readonly MemoryStream _stream;
 
         public MemoryNetworkPacket(IPacketHeader packetHeader)
         {
-            _packetHeader = packetHeader;
             _stream = new MemoryStream();
             OutputStream = new BinaryWriterOutputStream(_stream);
-            _packetHeader.WriteHeader(OutputStream);
+            packetHeader.WriteHeader(OutputStream);
         }
 
         public IOutputStream OutputStream { get; }
@@ -25,7 +23,7 @@ namespace Networking.PacketSend
         {
             _stream.Seek(0, SeekOrigin.Begin);
             Data = _stream.ReadAll();
-            _stream.Close();
+            OutputStream.Close();
             Complete = true;
         }
     }

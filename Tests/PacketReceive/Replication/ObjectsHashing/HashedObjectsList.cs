@@ -2,7 +2,7 @@
 using Networking.ObjectsHashing;
 using NUnit.Framework;
 
-namespace Tests.Replication.ObjectsHashing
+namespace Tests.PacketReceive.Replication.ObjectsHashing
 {
     public class HashedObjectsListTest
     {
