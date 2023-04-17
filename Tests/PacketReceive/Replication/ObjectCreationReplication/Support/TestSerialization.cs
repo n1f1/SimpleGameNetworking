@@ -1,5 +1,5 @@
-using Networking.PacketReceive.Replication.Serialization;
-using Networking.StreamIO;
+using Networking.Common.Replication.Serialization;
+using Networking.Common.StreamIO;
 
 namespace Tests.PacketReceive.Replication.ObjectCreationReplication.Support
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
-using Networking.PacketReceive.Replication.Serialization;
-using Networking.PacketSend;
+using Networking.Common.PacketSend;
+using Networking.Common.Replication.ObjectCreationReplication;
+using Networking.Common.Replication.Serialization;
 using NUnit.Framework;
 using Tests.PacketReceive.Replication.ObjectCreationReplication.Support;
 

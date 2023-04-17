@@ -1,5 +1,5 @@
 using System;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
+using Networking.Common.Replication.ObjectCreationReplication;
 
 namespace Tests.PacketReceive.Replication.ObjectCreationReplication.Support
 {

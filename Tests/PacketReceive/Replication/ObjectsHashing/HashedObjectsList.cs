@@ -1,5 +1,5 @@
 ﻿using System;
-using Networking.ObjectsHashing;
+using Networking.Common.Replication.ObjectsHashing;
 using NUnit.Framework;
 
 namespace Tests.PacketReceive.Replication.ObjectsHashing

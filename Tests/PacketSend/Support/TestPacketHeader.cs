@@ -1,5 +1,5 @@
-﻿using Networking.PacketSend.Packets;
-using Networking.StreamIO;
+﻿using Networking.Common.Packets;
+using Networking.Common.StreamIO;
 
 namespace Tests.PacketSend.Support
 {

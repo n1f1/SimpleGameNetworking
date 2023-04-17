@@ -1,5 +1,5 @@
 ﻿using System;
-using Networking.PacketSend;
+using Networking.Common.PacketSend;
 using NUnit.Framework;
 using Tests.PacketSend.Support;
 

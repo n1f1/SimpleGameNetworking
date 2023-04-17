@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Networking.PacketReceive.Replication.ObjectCreationReplication;
+using Networking.Common.Replication.ObjectCreationReplication;
 using NUnit.Framework;
 using Tests.PacketReceive.Replication.ObjectCreationReplication.Support;
 
