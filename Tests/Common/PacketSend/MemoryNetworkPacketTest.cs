@@ -1,9 +1,9 @@
 ﻿using System;
 using Networking.Common.PacketSend;
 using NUnit.Framework;
-using Tests.PacketSend.Support;
+using Tests.Common.PacketSend.Support;
 
-namespace Tests.PacketSend
+namespace Tests.Common.PacketSend
 {
     public class MemoryNetworkPacketTest
     {

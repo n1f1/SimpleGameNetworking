@@ -4,7 +4,7 @@ using System.IO;
 using Networking.Common.PacketReceive;
 using Random = System.Random;
 
-namespace Networking.Common.StreamIO
+namespace Networking.Common.StreamIO.NetworkSimulationTest
 {
     public class LatencyDebugTestNetworkStreamRead : INetworkStreamRead
     {

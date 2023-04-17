@@ -1,7 +1,7 @@
 using Networking.Common.Replication.Serialization;
 using Networking.Common.StreamIO;
 
-namespace Tests.PacketReceive.Replication.ObjectCreationReplication.Support
+namespace Tests.Common.Replication.ObjectCreationReplication.Support
 {
     public class TestSerialization<T> : ISerialization<T>
     {

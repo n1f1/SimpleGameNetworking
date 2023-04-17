@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
+using Networking.Common.StreamIO;
 
-namespace Networking.Common.StreamIO
+namespace Networking.Common.Utilities
 {
     public static class IOStreamExtensions
     {

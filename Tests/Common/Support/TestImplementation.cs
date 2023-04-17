@@ -1,4 +1,4 @@
-﻿namespace Tests.PacketReceive.Replication.ObjectCreationReplication.Support
+﻿namespace Tests.Common.Support
 {
     public class TestImplementation<T> : ITestGenericInterface<T>
     {

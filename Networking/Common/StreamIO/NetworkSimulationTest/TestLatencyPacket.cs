@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Networking.Common.StreamIO
+namespace Networking.Common.StreamIO.NetworkSimulationTest
 {
     internal class TestLatencyPacket
     {

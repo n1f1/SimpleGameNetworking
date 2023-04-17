@@ -1,7 +1,7 @@
 using System;
 using Networking.Common.Replication.ObjectCreationReplication;
 
-namespace Tests.PacketReceive.Replication.ObjectCreationReplication.Support
+namespace Tests.Common.Replication.ObjectCreationReplication.Support
 {
     public class NullIDConversion : ITypeIdConversion
     {

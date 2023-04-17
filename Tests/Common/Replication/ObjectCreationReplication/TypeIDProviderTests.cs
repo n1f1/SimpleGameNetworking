@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Networking.Common.Replication.ObjectCreationReplication;
 using NUnit.Framework;
 
-namespace Tests.PacketReceive.Replication.ObjectCreationReplication
+namespace Tests.Common.Replication.ObjectCreationReplication
 {
     public class TypeIDProviderTests
     {

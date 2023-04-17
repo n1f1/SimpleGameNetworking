@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Networking.Common.Replication.ObjectCreationReplication;
 
-namespace Networking.Common.Replication.ObjectCreationReplication
+namespace Networking.Common
 {
     public class GenericInterfaceWithParameterList : IGenericInterfaceList
     {
         private readonly Dictionary<Type, object> _serialization;
-        private readonly Type _interfaceType;
+
+        public Type InterfaceType { get; }
 
         public GenericInterfaceWithParameterList(Dictionary<Type, object> serialization, Type interfaceType)
         {
@@ -18,7 +20,7 @@ namespace Networking.Common.Replication.ObjectCreationReplication
             }
 
             _serialization = serialization;
-            _interfaceType = interfaceType ?? throw new ArgumentNullException(nameof(interfaceType));
+            InterfaceType = interfaceType ?? throw new ArgumentNullException(nameof(interfaceType));
         }
 
         public bool ContainsForType(Type type) =>
@@ -27,18 +29,19 @@ namespace Networking.Common.Replication.ObjectCreationReplication
         public object GetForType(Type type)
         {
             if (ContainsForType(type) == false)
-                throw new InvalidOperationException($"{_interfaceType} for {type} was not registered");
+                throw new InvalidOperationException($"{InterfaceType} for {type} was not registered");
 
             return _serialization[type];
         }
 
         public void Register(Type type, object genericInterface)
         {
-            if (ReflectionUtility.AssertImplementsGenericInterface(genericInterface.GetType(), type, _interfaceType) == false)
+            if (ReflectionUtility.AssertImplementsGenericInterface(genericInterface.GetType(), type, InterfaceType) ==
+                false)
                 return;
 
             if (_serialization.ContainsKey(type))
-                throw new InvalidOperationException($"Already contains {_interfaceType} for {type} type");
+                throw new InvalidOperationException($"Already contains {InterfaceType} for {type} type");
 
             _serialization.Add(type, genericInterface);
         }

@@ -1,15 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using Networking.Common;
 using Networking.Common.PacketSend;
 using Networking.Common.Replication.ObjectCreationReplication;
 using Networking.Common.Replication.Serialization;
 using NUnit.Framework;
-using Tests.PacketReceive.Replication.ObjectCreationReplication.Support;
+using Tests.Common.Replication.ObjectCreationReplication.Support;
+using Tests.Common.Support;
 
-namespace Tests.PacketReceive.Replication.ObjectCreationReplication
+namespace Tests.Common
 {
     public class ObjectReplicationPacketFactoryTests
     {
+        [Test]
+        public void ConNotInitializeWithInvalidList()
+        {
+            ITypeIdConversion idConversion = new NullIDConversion();
+            Dictionary<Type, object> dictionary = new() {{typeof(int), new TestImplementation<int>()}};
+            IGenericInterfaceList invalidList =
+                new GenericInterfaceWithParameterList(dictionary, typeof(ITestGenericInterface<>));
+
+            Assert.Throws<ArgumentException>(() => new ObjectReplicationPacketFactory(invalidList, idConversion));
+        }
+
         [Test]
         public void InvokesSerializationMethod()
         {

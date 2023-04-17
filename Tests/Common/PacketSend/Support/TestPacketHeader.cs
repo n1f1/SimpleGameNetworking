@@ -1,7 +1,7 @@
 ﻿using Networking.Common.Packets;
 using Networking.Common.StreamIO;
 
-namespace Tests.PacketSend.Support
+namespace Tests.Common.PacketSend.Support
 {
     public class TestPacketHeader : IPacketHeader
     {
