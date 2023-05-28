@@ -38,7 +38,6 @@ namespace Networking.Server.Connection
             TcpClient tcpClient = tcpListener.AcceptTcpClient();
             tcpClient.NoDelay = true;
             tcpClient.SendBufferSize = 1500;
-            Console.WriteLine("DemoGameClient connected...");
 
             return tcpClient;
         }

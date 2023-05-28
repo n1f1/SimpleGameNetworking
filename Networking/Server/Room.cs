@@ -17,8 +17,13 @@ namespace Networking.Server
 
         public void Send(INetworkPacket movePacket)
         {
-            foreach (ServerClient client in _clients) 
+            foreach (ServerClient client in Clients) 
                 client.Sender.SendPacket(movePacket);
+        }
+
+        public void Remove(ServerClient serverClient)
+        {
+            _clients.Remove(serverClient);
         }
     }
 }

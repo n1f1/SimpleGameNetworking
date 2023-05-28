@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace Networking.Client.Connection
@@ -6,11 +7,15 @@ namespace Networking.Client.Connection
     public class ServerConnection : IServerConnection
     {
         private readonly IServerConnectionView _serverConnectionView;
+        private readonly string _host;
+        private readonly int _port;
         private TcpClient _tcpClient;
 
-        public ServerConnection(IServerConnectionView serverConnectionView)
+        public ServerConnection(IServerConnectionView connectionView, string host, int port)
         {
-            _serverConnectionView = serverConnectionView;
+            _serverConnectionView = connectionView ?? throw new ArgumentNullException(nameof(connectionView));
+            _host = host ?? throw new ArgumentNullException(nameof(host));
+            _port = port;
         }
 
         public TcpClient Client => _tcpClient;
@@ -22,20 +27,25 @@ namespace Networking.Client.Connection
 
             try
             {
-                await tcpClient.ConnectAsync("192.168.1.87", 55555);
+                await tcpClient.ConnectAsync(_host, _port);
             }
             catch (SocketException exception)
             {
-                if (exception.ErrorCode.Equals(10061))
+                if (exception.ErrorCode.Equals(ConnectionErrors.ConnectionRefusedErrorCode))
                 {
-                    _serverConnectionView.DisplayError("Server is unavailable");
+                    _serverConnectionView.DisplayError(ConnectionErrors.ServerIsUnavailableMessage);
                     return false;
                 }
 
                 _serverConnectionView.DisplayError(exception.ToString());
                 return false;
             }
-
+            catch (Exception)
+            {
+                _serverConnectionView.DisplayError(ConnectionErrors.UnknownErrorMessage);
+                throw;
+            }
+            
             _serverConnectionView.DisplayConnected();
             _tcpClient = tcpClient;
 
